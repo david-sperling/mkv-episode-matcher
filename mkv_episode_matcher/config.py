@@ -5,7 +5,7 @@ from pathlib import Path
 
 from loguru import logger
 
-MAX_THREADS = 4
+MAX_THREADS = 24
 
 
 def get_total_threads():

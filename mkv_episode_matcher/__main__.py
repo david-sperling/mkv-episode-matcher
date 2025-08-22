@@ -222,7 +222,6 @@ def main():
         with console.status("[bold green]Checking GPU support..."):
             check_gpu_support()
         return
-
     logger.debug(f"Command-line arguments: {args}")
     # Onboarding: run if --onboard or config file missing
     if args.onboard or not CONFIG_FILE.exists():
@@ -270,7 +269,6 @@ def main():
             "OpenSubtitles Password",
             "Account password for OpenSubtitles",
         )
-
     # Use config for show directory
     show_dir = args.show_dir or config.get("show_dir")
     if not show_dir:
@@ -288,7 +286,7 @@ def main():
         console.print(f"Using current directory: [cyan]{show_dir}[/cyan]")
 
     logger.debug(f"Show Directory: {show_dir}")
-
+    console.print(f"Show Directory: {show_dir}")
     # Set the configuration
     set_config(
         tmdb_api_key,
@@ -300,10 +298,14 @@ def main():
         CONFIG_FILE,
     )
     logger.info("Configuration set")
-
-    # Process the show
-    from mkv_episode_matcher.episode_matcher import process_show
-    from mkv_episode_matcher.utils import get_valid_seasons
+    console.print("Configuration set")
+    try:
+        # Process the show
+        from mkv_episode_matcher.episode_matcher import process_show
+        from mkv_episode_matcher.utils import get_valid_seasons
+    except Exception as err:
+        console.print(f"[red]{err}[/red]")
+        raise err
 
     console.print()
     if args.dry_run:
@@ -353,7 +355,6 @@ def main():
 
     # Show where logs are stored
     console.print(f"\n[dim]Logs available at: {log_dir}[/dim]")
-
 
 # Run the main function if the script is run directly
 if __name__ == "__main__":
